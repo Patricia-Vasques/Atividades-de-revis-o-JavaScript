@@ -10,7 +10,16 @@ function separadorDeNumeros(arrayDeNumeros, opcao){
             numerosImpares.push(numero);
         }
     }
-}
 
+    if (opcao === 1){
+        return numerosImpares;
+    } else if (opcao === 2){
+        return numerosPares;
+    } else if (opcao === 3) {
+        return {impares: numerosImpares, pares: numerosPares};
+    } else {
+        return "Opção inválida escolha um número de 1 a 3"
+    }
+}
 
 module.exports = separadorDeNumeros;
