@@ -5,3 +5,6 @@ console.log("resultado da soma é:", resultadoSoma);
 
 const resultadoSubtracao = calculadora.subtrair(125, 35);
 consolte.log("resultado da subtração é:", resultadoSubtracao);
+
+const resultadoMultiplicacao = calculadora.multiplicar(8, 6);
+console.log("resultado da multiplicação é:", resultadoMultiplicacao);
