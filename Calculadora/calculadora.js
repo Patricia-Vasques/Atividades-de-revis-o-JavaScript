@@ -14,4 +14,4 @@ function dividir(x, y){
     return (x / y)
 };
 
-module.exports = {somar, subtrair, multiplicar}
+module.exports = {somar, subtrair, multiplicar, dividir}
