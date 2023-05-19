@@ -31,4 +31,25 @@ function login(email, senha){
     } else {
         return "Login realizado com sucesso"
     }
+
+    function excluirUsuario(email,senha){
+        const usuarios = carregarUsuarios();
+
+        //verificação se o email fornecido existe
+        const usuarioIndex = usuarios.findIndex((usuario) => usuario.email === email);
+        if(usuarioIndex === -1){
+            return "Email não encontrado"
+        }
+        
+        //verificação da senha
+        if (usuarios[usuarioIndex].senha !== senha){
+            return "Senha não confere"
+        }
+
+        usuarios.splice(usuariosIndex, 1);
+        salvarUsuarios(usuarios);
+
+        return "Sucesso ao excluir o usuário!"
+        
+    }
 }
