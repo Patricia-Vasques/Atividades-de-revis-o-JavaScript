@@ -1,55 +1,66 @@
-const fs = require("fs")
+const fs = require("fs");
 
-function cadastrarNovoUsuario(novoUsuario){
-    const usuarios = carregarUsuarios();
+let usuarios = carregarUsuarios();
+
+function cadastrarNovoUsuario(novoUsuario) {
+  const { email } = novoUsuario;
+
+  // Verificar se o email já está sendo utilizado
+  const emailExistente = usuarios.find((usuario) => usuario.email === email);
+  if (emailExistente) {
+    return "Este email já está sendo utilizado!";
+  }
+
+  // Adicionar o novo usuário à lista de usuários e salvar no arquivo
+  usuarios.push(novoUsuario);
+  salvarUsuarios(usuarios);
+
+  return "Usuário cadastrado com sucesso!";
 }
 
-//vamos verificar se o email cadastrado já existe
-const emailExitente = usuarios.find((usuario) => usuario.email === novoUsuario.email);
-if (emailExitente) {
-    return "Este email já está cadastrado!";
-} else{
+function fazerLogin(email, senha) {
+  const usuario = usuarios.find((u) => u.email === email);
 
-//Para adicionar o usuário novo cadastrado em uma lista  de usuário e salvar na lista de usuarios no arquivo
-usuarios.push(novoUsuario);
-salvarUsuarios(usuarios);
+  if (!usuario) {
+    return "Usuário não encontrado";
+  }
 
-return "Usuário cadastrado com sucesso!"
+  if (usuario.senha !== senha) {
+    return "Senha incorreta";
+  }
+
+  return "Login realizado com sucesso";
 }
 
-function login(email, senha){
-    const usuarios = carregarUsuarios();
+function excluirUsuario(email, senha) {
+  const usuarioIndex = usuarios.findIndex((u) => u.email === email);
 
-    //verificação da existência do email
-    const novoUsuario = usuarios.find((usuario) => usuario.email === email);
-    if(!novoUsuario){
-        return "Email não encontrado";
-    }
-    //verificação se a senha fornecida está correta
-    if(usuario.senha !== senha){
-        return "Senha não confere!"
-    } else {
-        return "Login realizado com sucesso"
-    }
+  if (usuarioIndex === -1) {
+    return "Usuário não encontrado";
+  }
 
-    function excluirUsuario(email,senha){
-        const usuarios = carregarUsuarios();
+  if (usuarios[usuarioIndex].senha !== senha) {
+    return "Senha incorreta";
+  }
 
-        //verificação se o email fornecido existe
-        const usuarioIndex = usuarios.findIndex((usuario) => usuario.email === email);
-        if(usuarioIndex === -1){
-            return "Email não encontrado"
-        }
-        
-        //verificação da senha
-        if (usuarios[usuarioIndex].senha !== senha){
-            return "Senha não confere"
-        }
+  usuarios.splice(usuarioIndex, 1);
+  salvarUsuarios(usuarios);
 
-        usuarios.splice(usuariosIndex, 1);
-        salvarUsuarios(usuarios);
-
-        return "Sucesso ao excluir o usuário!"
-        
-    }
+  return "Usuário excluído com sucesso";
 }
+
+function carregarUsuarios() {
+  try {
+    const usuariosJSON = fs.readFileSync("usuarios.json", "utf-8");
+    return JSON.parse(usuariosJSON);
+  } catch (error) {
+    return [];
+  }
+}
+
+function salvarUsuarios(usuarios) {
+  const usuariosJSON = JSON.stringify(usuarios);
+  fs.writeFileSync("usuarios.json", usuariosJSON);
+}
+
+module.exports = { cadastrarNovoUsuario, fazerLogin, excluirUsuario };
